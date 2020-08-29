@@ -13,3 +13,13 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+
+## Orion Specific
+Orion
+orion
+.DS_Store
+ORION_*Z_ABORT.zip
+ORION*.zip
+Output/*
+output/*

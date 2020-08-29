@@ -1,0 +1,18 @@
+# Common usage: 
+# ./Orion -m windows -f csv -o output -c configs/windows.toml -l debug -T 
+
+forensicMode = false
+
+modules = ["WindowsDirlistModule"]
+
+# =============================
+# =============================
+# WindowsDirlistModule Configuration
+DirlistRootWalkDir = ""                         # MUST BE EMPTY FOR WINDOWS
+DirlistExcludedDirs = ["\\Users\\*\\OneDrive"]  # MUST EXCLUDE DRIVE LETTER i.e. 'C:'\path...
+DirlistExcludedDrives = ["C:"]                  # MUST INCLUDE : i.e. "C:"
+DirlistExcludedExts = [".app", ".framework",".lproj",".plugin",".kext",".osax",".bundle",".driver",".wdgt"]
+DirlistHashSizeLimitBytes = 15000 # 10485760    # ~10.486 MB - 10,485,760 B -- ~10x faster than if you hash every file
+DirlistDoHashMD5 = true
+DirlistDoHashSHA256 = true
+DirlistVerbose = false

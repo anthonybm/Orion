@@ -1,0 +1,75 @@
+# Common usage: 
+# ./Orion -m mac -f csv -o output -c configs/mac.toml -l debug -T 
+
+# TODO document which support this etc.
+# TODO implement mounted mode. (target mounted volume? target E01 and mount??)
+# TODO Refactor to use build constraints + Refactor OS specific code into OS specific directories
+
+forensicMode = false
+
+modules = [ # Comment out what you do not need 
+   "MacSampleModule",
+   "MacInstallHistoryModule",
+   "MacSystemLogModule",
+   "MacAppleSystemLogModule",
+   "MacSSHModule",
+   "MacBashModule",
+   "MacQuarantinesModule",
+   "MacSystemInfoModule",
+   "MacDirlistModule",
+   "MacNetconfigModule",
+   "MacCookiesModule",
+   "MacAutorunsModule",
+   "MacSpotlightShortcutsModule",
+   "MacMRUModule",
+   "MacUtmpxModule",
+   "MacAuditLogModule",
+   "MacUsersModule",
+   "MacChromeModule",
+   "MacFirefoxModule",
+   "MacTerminalStateModule",
+   "MacEventTapsModule",
+   "MacLiveNetstat",
+   "MacLivePslistModule",
+   "MacLiveLsofModule",
+   ]
+# modules = [""]
+
+
+# =============================
+# Modules TODO
+# From automactc
+# "MacCoreAnalyticsModule" - 8
+# "MacQuicklookModule" -  6
+# "MacSafariModule" - 4
+# From mac_apt
+# "MacAppListModule" /Users/*/Library/Application Support/com.apple.spotlight/appList.dat
+# "MacAppleRemoteManagementModule" /private/var/db/RemoteManagement/caches/... 1) UserAcct.tmp  2) AppUsage.plist 3) AppUsage.tmp
+# "MacBluetoothModule" /Library/Preferences/com.apple.Bluetooth.plist
+# "MacDockModule" /User/*/Library/Preferences/com.apple.dock.plist
+# "MacDomainsModule" /Library/Preferences/OpenDirectory/Configurations/Active Directory
+# "MacFSEventsModule" /System/Volumes/Data/.fseventsd
+# "MaciDeviceBackupsModule" {}/Library/Application Support/MobileSync/Backup
+# "MaciDeviceInfoModule" /Users/*/Library/Preferences/com.apple.iPod.plist
+# "MaciMessageModule"
+# "MacINetAccountsModule"
+# "MacMSOfficeModule"
+# "MacNetUsageModule"
+# "MacNotesModule"
+# "MacNotificationsModule"
+# "MacRecentItemsModule" 
+# "MacSpotlightIndexModule" 
+# "MacScreentimeModule" /private/var/folders/XX/...?/0/com.apple.ScreenTimeAgent/Store/
+# "MacSudoLastRunModule" /private/var/db/sudo/ts
+# "MacSavedStateModule" {}/Library/Saved Application State
+# "MacUnifiedLogsModule" /private/var/db/diagnostics /private/var/db/uuidtext
+# =============================
+
+# Dirlist Configuration
+DirlistRootWalkDir = "/"
+DirlistExcludedDirs = ["/System/Volumes/Data/Users/amartinez/Box", "/Users/amartinez/Box", ".fseventsd",".DocumentRevisions-V100",".Spotlight-V100"]
+DirlistExcludedExts = [".app", ".framework",".lproj",".plugin",".kext",".osax",".bundle",".driver",".wdgt"]
+DirlistHashSizeLimitBytes = 10485760 # ~10.486 MB - 10,485,760 B -- ~10x faster than if you hash every file
+DirlistDoHashMD5 = true
+DirlistDoHashSHA256 = true
+DirlistVerbose = false
