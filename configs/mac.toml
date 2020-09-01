@@ -37,12 +37,12 @@ modules = [ # Comment out what you do not need
 
 
 # =============================
-# Modules TODO
-# From automactc
-# "MacCoreAnalyticsModule" - 8
-# "MacQuicklookModule" -  6
-# "MacSafariModule" - 4
-# From mac_apt
+# Modules TODO these are suggested ideas for future modules based on existing tools
+# From automactc by CrowdStrike
+# "MacCoreAnalyticsModule"
+# "MacQuicklookModule"
+# "MacSafariModule"
+# From mac_apt by ydkhatri
 # "MacAppListModule" /Users/*/Library/Application Support/com.apple.spotlight/appList.dat
 # "MacAppleRemoteManagementModule" /private/var/db/RemoteManagement/caches/... 1) UserAcct.tmp  2) AppUsage.plist 3) AppUsage.tmp
 # "MacBluetoothModule" /Library/Preferences/com.apple.Bluetooth.plist
@@ -67,7 +67,7 @@ modules = [ # Comment out what you do not need
 
 # Dirlist Configuration
 DirlistRootWalkDir = "/"
-DirlistExcludedDirs = ["/System/Volumes/Data/Users/amartinez/Box", "/Users/amartinez/Box", ".fseventsd",".DocumentRevisions-V100",".Spotlight-V100"]
+DirlistExcludedDirs = [".fseventsd",".DocumentRevisions-V100",".Spotlight-V100"] # Recommend adding cloud storage paths here for exclusion
 DirlistExcludedExts = [".app", ".framework",".lproj",".plugin",".kext",".osax",".bundle",".driver",".wdgt"]
 DirlistHashSizeLimitBytes = 10485760 # ~10.486 MB - 10,485,760 B -- ~10x faster than if you hash every file
 DirlistDoHashMD5 = true

@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tonythetiger06/Orion/datawriter"
-	"github.com/tonythetiger06/Orion/instance"
+	"github.com/anthonybm/Orion/datawriter"
+	"github.com/anthonybm/Orion/instance"
 	"go.uber.org/zap"
 )
 
@@ -103,18 +103,6 @@ func (m MacSystemLogModule) systemLog(inst instance.Instance) error {
 func (m MacSystemLogModule) parseSystemLogFile(fp string) ([][]string, error) {
 	var entries [][]string
 
-	// scanner, err := m.openSystemLogFile(fp)
-	// if err != nil {
-	// 	return [][]string{}, err
-	// }
-
-	// for scanner.Scan() {
-	// 	item := scanner.Text()
-	// 	zap.L().Debug("parsed item from "+fp, zap.String("module", moduleName), zap.String("contents", item))
-	// 	entries = append(entries, m.parseSystemLogEntry(item, fp))
-	// }
-
-	// cont, err := ioutil.ReadFile(fp)
 	cont, err := m.openSystemLogFileIntoMemory(fp)
 	if err != nil {
 		return [][]string{}, err

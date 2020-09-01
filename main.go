@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tonythetiger06/Orion/engine"
-	"github.com/tonythetiger06/Orion/instance"
+	"github.com/anthonybm/Orion/engine"
+	"github.com/anthonybm/Orion/instance"
 	"go.uber.org/zap"
 
 	"github.com/akamensky/argparse"

@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tonythetiger06/Orion/datawriter"
-	"github.com/tonythetiger06/Orion/instance"
-	"github.com/tonythetiger06/Orion/util"
-	"github.com/tonythetiger06/Orion/util/machelpers"
+	"github.com/anthonybm/Orion/datawriter"
+	"github.com/anthonybm/Orion/instance"
+	"github.com/anthonybm/Orion/util"
+	"github.com/anthonybm/Orion/util/machelpers"
 	"go.uber.org/zap"
 )
 

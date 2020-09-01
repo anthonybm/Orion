@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tonythetiger06/Orion/datawriter"
-	"github.com/tonythetiger06/Orion/instance"
+	"github.com/anthonybm/Orion/datawriter"
+	"github.com/anthonybm/Orion/instance"
 	"go.uber.org/zap"
 )
 
@@ -99,10 +99,6 @@ func (m MacAppleSystemLogModule) asl(inst instance.Instance) error {
 }
 
 func (m MacAppleSystemLogModule) parseAslFile(fp string) ([][]string, error) {
-	// fnull, err := os.OpenFile(os.DevNull, os.O_WRONLY, 0755)
-	// if err != nil {
-	// 	return [][]string{}, err
-	// }
 	aslCmd := exec.Command("syslog", "-f", fp, "-T", "utc.3")
 	aslOut, outerr := aslCmd.StdoutPipe()
 	aslErr, errerr := aslCmd.StderrPipe()
@@ -138,13 +134,11 @@ func (m MacAppleSystemLogModule) parseAslFile(fp string) ([][]string, error) {
 		return [][]string{}, errors.New(fmt.Sprintf("could not parse '%s'. Invalid Data Store error reported - file may be corrupted.", fp))
 	}
 
-	// logdata := strings.Split(aslOutString, '\n')
 	cont, err := m.openAslFileFromSyslog(aslOutString)
 	if err != nil {
 		return [][]string{}, err
 	}
 	var entries [][]string
-	// text := string(cont)
 
 	count := 0
 	for i, item := range cont {

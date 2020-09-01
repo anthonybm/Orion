@@ -13,8 +13,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tonythetiger06/Orion/instance"
-	"github.com/tonythetiger06/Orion/windows/modules/windowsdirlist"
+	"github.com/anthonybm/Orion/instance"
+	"github.com/anthonybm/Orion/windows/modules/windowsdirlist"
 	"go.uber.org/zap"
 )
 

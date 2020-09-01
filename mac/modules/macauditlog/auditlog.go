@@ -10,10 +10,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/anthonybm/Orion/datawriter"
+	"github.com/anthonybm/Orion/instance"
+	"github.com/anthonybm/Orion/util"
 	"github.com/beevik/etree"
-	"github.com/tonythetiger06/Orion/datawriter"
-	"github.com/tonythetiger06/Orion/instance"
-	"github.com/tonythetiger06/Orion/util"
 	"go.uber.org/zap"
 )
 

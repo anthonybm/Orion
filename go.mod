@@ -1,4 +1,4 @@
-module github.com/tonythetiger06/Orion
+module github.com/anthonybm/Orion
 
 go 1.14
 

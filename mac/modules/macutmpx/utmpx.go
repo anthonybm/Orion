@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tonythetiger06/Orion/datawriter"
-	"github.com/tonythetiger06/Orion/instance"
-	"github.com/tonythetiger06/Orion/util"
+	"github.com/anthonybm/Orion/datawriter"
+	"github.com/anthonybm/Orion/instance"
+	"github.com/anthonybm/Orion/util"
 	"go.uber.org/zap"
 )
 

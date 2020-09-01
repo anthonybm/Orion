@@ -4,8 +4,8 @@ import (
 	"errors"
 	"os"
 
-	"github.com/tonythetiger06/Orion/configs"
-	"github.com/tonythetiger06/Orion/util"
+	"github.com/anthonybm/Orion/configs"
+	"github.com/anthonybm/Orion/util"
 	"go.uber.org/zap"
 )
 

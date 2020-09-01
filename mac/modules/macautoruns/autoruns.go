@@ -13,10 +13,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/tonythetiger06/Orion/datawriter"
-	"github.com/tonythetiger06/Orion/instance"
-	"github.com/tonythetiger06/Orion/util"
-	"github.com/tonythetiger06/Orion/util/machelpers"
+	"github.com/anthonybm/Orion/datawriter"
+	"github.com/anthonybm/Orion/instance"
+	"github.com/anthonybm/Orion/util"
+	"github.com/anthonybm/Orion/util/machelpers"
 	"go.uber.org/zap"
 )
 
@@ -257,7 +257,6 @@ func (m MacAutorunsModule) kernelExtentions(inst instance.Instance) ([][]string,
 		// Parse plist/bplist
 		data, err := machelpers.DecodePlist(path, inst.GetTargetPath())
 		if err != nil {
-			// return [][]string{}, errors.New("failed to decode '" + path + "': " + err.Error())
 			zap.L().Error("could not parse plist '"+path+"': "+err.Error(), zap.String("module", moduleName))
 			continue
 		}
@@ -320,7 +319,6 @@ func (m MacAutorunsModule) launchAgentsDaemons(inst instance.Instance) ([][]stri
 		// Parse plist/bplist
 		data, err := machelpers.DecodePlist(path, inst.GetTargetPath())
 		if err != nil {
-			// return [][]string{}, errors.New("failed to decode '" + path + "': " + err.Error())
 			zap.L().Error("could not parse plist '"+path+"': "+err.Error(), zap.String("module", moduleName))
 			continue
 		}
@@ -336,7 +334,6 @@ func (m MacAutorunsModule) launchAgentsDaemons(inst instance.Instance) ([][]stri
 			if val, ok := item["ProgramArguments"].([]interface{}); ok {
 				if len(val) > 1 {
 					valmap["program_arguments"] = fmt.Sprint(val[1:])
-					// fmt.Println(val[1:])
 				}
 			}
 
@@ -382,7 +379,6 @@ func (m MacAutorunsModule) loginItems(inst instance.Instance) ([][]string, error
 		// Parse plist/bplist
 		data, err := machelpers.DecodePlist(path, inst.GetTargetPath())
 		if err != nil {
-			// return [][]string{}, errors.New("failed to decode '" + path + "': " + err.Error())
 			zap.L().Error("could not parse plist '"+path+"': "+err.Error(), zap.String("module", moduleName))
 			continue
 		}

@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tonythetiger06/Orion/datawriter"
-	"github.com/tonythetiger06/Orion/instance"
-	"github.com/tonythetiger06/Orion/util"
-	"github.com/tonythetiger06/Orion/util/machelpers"
+	"github.com/anthonybm/Orion/datawriter"
+	"github.com/anthonybm/Orion/instance"
+	"github.com/anthonybm/Orion/util"
+	"github.com/anthonybm/Orion/util/machelpers"
 	"go.uber.org/zap"
 )
 
@@ -80,7 +80,6 @@ func (m MacBashModule) bash(inst instance.Instance) error {
 	for _, fp := range files {
 		user := util.GetUsernameFromPath(fp)
 		userlist = append(userlist, user)
-		// zap.L().Debug("Parsing bash and other history for "+user, zap.String("module", moduleName))
 
 		// parse files
 		fileMetadata, err := machelpers.FileMetadata(fp, moduleName)
@@ -97,17 +96,6 @@ func (m MacBashModule) bash(inst instance.Instance) error {
 		index := 0
 		for scanner.Scan() {
 			line := scanner.Text()
-
-			// header := []string{
-			// 	"mtime",
-			// 	"atime",
-			// 	"ctime",
-			// 	"btime",
-			// 	"src_file",
-			// 	"user",
-			// 	"item_index",
-			// 	"cmd",
-			// }
 
 			entry := []string{
 				fileMetadata["mtime"],

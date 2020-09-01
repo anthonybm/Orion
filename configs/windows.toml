@@ -1,9 +1,10 @@
 # Common usage: 
 # ./Orion -m windows -f csv -o output -c configs/windows.toml -l debug -T 
 
-forensicMode = false
+forensicMode = false # does nothing unless you use it in the module ;) 
 
-modules = ["WindowsDirlistModule"]
+# Specify modules to run (comma separated)
+modules = ["WindowsDirlistModule"] # WIP/example
 
 # =============================
 # =============================
