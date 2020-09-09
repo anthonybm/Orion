@@ -46,7 +46,7 @@ const (
 	nsMutableDictionary = "NSMutableDictionary"
 )
 
-// NS primatives
+// NS primitives
 const (
 	nsMutableString = "NSMutableString"
 	nsMutableData   = "NSMutableData"
@@ -229,7 +229,7 @@ func extractDictionary(object map[string]interface{}, objects []interface{}) (ma
 	return result, nil
 }
 
-func extractNSPrimativeObject(object map[string]interface{}, objects []interface{}) (map[string]interface{}, error) {
+func extractNSPrimitiveObject(object map[string]interface{}, objects []interface{}) (map[string]interface{}, error) {
 	var keyRefs = []plist.UID{}
 	keyRefs = append(keyRefs, object[nsKeys].(plist.UID))
 	keys, err := extractNSObjects(keyRefs, objects)

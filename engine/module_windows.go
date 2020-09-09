@@ -232,7 +232,7 @@ func safeAbort(i instance.Instance, wg *sync.WaitGroup) {
 	zap.L().Warn("Orion termination complete")
 }
 
-// executeModule takes in the name of a method we want to retreive, module, and executes it
+// executeModule takes in the name of a method we want to retrieve, module, and executes it
 // Uses instances of receiver type *Module
 func executeModule(module string, wg *sync.WaitGroup, inst instance.Instance /*fields here*/) error {
 	// Handle multithreading, defer synchronous waitgroup
@@ -244,7 +244,7 @@ func executeModule(module string, wg *sync.WaitGroup, inst instance.Instance /*f
 	startTime := time.Now()
 
 	// Take instance of *Module and turn into reflect.Value via reflect.ValueOf()
-	// Call MethodByName() with the name of the method we want to retreive
+	// Call MethodByName() with the name of the method we want to retrieve
 	out, err := invoke(module, "Start", inst)
 	if err != nil {
 		finishTime := time.Now()

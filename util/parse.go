@@ -51,7 +51,7 @@ func InterfaceToString(i interface{}) (string, error) {
 	return "ERROR", fmt.Errorf("Could not convert [%s] of type [%s] to [string] - no method implemented to handle, please add it", i, reflect.TypeOf(i).String())
 }
 
-// MapToJSONString converts an input map[string]interface{} to an appropraite json string for output writing
+// MapToJSONString converts an input map[string]interface{} to an appropriate json string for output writing
 func MapToJSONString(m map[string]interface{}) string {
 	pairs := []string{}
 	for k, v := range m {

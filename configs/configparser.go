@@ -27,7 +27,7 @@ type MacConfig struct {
 	Verbose                   bool
 	Modules                   []string // modules to execute
 	DirlistExcludedDirs       []string // Folders to exclude
-	DirlistExcludedExts       []string // Extentions to exclude
+	DirlistExcludedExts       []string // Extensions to exclude
 	DirlistRootWalkDir        string
 	DirlistHashSizeLimitBytes int
 	DirlistDoHashMD5          bool
@@ -40,14 +40,14 @@ type WindowsConfig struct {
 	Modules                   []string // modules to execute
 	DirlistExcludedDrives     []string // Windows drives to exclude
 	DirlistExcludedDirs       []string // Folders to exclude
-	DirlistExcludedExts       []string // Extentions to exclude
+	DirlistExcludedExts       []string // Extensions to exclude
 	DirlistRootWalkDir        string
 	DirlistHashSizeLimitBytes int
 	DirlistDoHashMD5          bool
 	DirlistDoHashSHA256       bool
 }
 
-// configTypeError defines an error occuring with Orion not ready to parse that config type.
+// configTypeError defines an error occurring with Orion not ready to parse that config type.
 type configTypeError struct {
 	arg  string
 	prob string

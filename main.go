@@ -89,7 +89,7 @@ func main() {
 		return
 	}
 
-	// Handle flags that return immediatly
+	// Handle flags that return immediately
 	if *listmodules {
 		// Grab string list of modules to execute from config, throw error if field does not exist
 		modulesToExecute, err := inst.GetOrionModules()
@@ -150,7 +150,7 @@ func main() {
 		}
 	}
 
-	zap.L().Info("Finished Orion setup. Begining main execution")
+	zap.L().Info("Finished Orion setup. Beginning main execution")
 	//  [END]  Final debug statements before execution
 
 	// Execute modules

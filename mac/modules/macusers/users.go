@@ -99,7 +99,7 @@ func (m MacUsersModule) users(inst instance.Instance) error {
 	// try via plist first
 	adminData, err := machelpers.DecodePlist(filepathAdminUsersPlist, inst.GetTargetPath())
 	if err != nil {
-		zap.L().Debug(fmt.Sprintf("Could not retreive admin users via plist parsing: %s", err.Error()), zap.String("module", moduleName))
+		zap.L().Debug(fmt.Sprintf("Could not retrieve admin users via plist parsing: %s", err.Error()), zap.String("module", moduleName))
 
 		// use DSCL to obtain admin users if we are NOT in forensic mode
 
