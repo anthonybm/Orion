@@ -3,7 +3,15 @@
 
 [![MIT](https://img.shields.io/badge/license-MIT-blue)](https://choosealicense.com/licenses/mit/)
 [![Latest version](https://img.shields.io/badge/version-v0.2.0-blue)](https://github.com/anthonybm/goMass/releases/tag/v0.2.0-alpha)
+[![](https://goreportcard.com/badge/github.com/anthonybm/Orion)](https://goreportcard.com/report/github.com/anthonybm/Orion)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fanthonybm%2FOrion.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fanthonybm%2FOrion?ref=badge_shield)
 ![status](https://img.shields.io/badge/status-alpha-red)
+
+### tl;dr
+* Compiles to a single binary that references a config file
+* Builds/runs on **macOS** and **Windows** (theoretically Linux as well but not tested :shrug:)
+* Currently in "alpha" - (*needs more testing and features*) - but plenty to use and work with now :) 
+* That "plenty" includes various macOS modules and a comprehensive Windows example! 
 
 ## Purpose
 Orion is an artifact triage tool framework that facilitates independent modules to run and collect whatever forensic artifact is specified. Orion allows contributers to add functionality to parse and triage unimplemented forensic artifacts in the form of "modules", which essentially are packages in Go that contain the required constructs and supplementary functionality to parse the artifacts. 
