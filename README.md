@@ -6,6 +6,7 @@
 [![](https://goreportcard.com/badge/github.com/anthonybm/Orion)](https://goreportcard.com/report/github.com/anthonybm/Orion)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fanthonybm%2FOrion.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fanthonybm%2FOrion?ref=badge_shield)
 ![status](https://img.shields.io/badge/status-alpha-red)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fanthonybm%2FOrion.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fanthonybm%2FOrion?ref=badge_shield)
 
 ### tl;dr
 * Compiles to a single binary that references a config file
@@ -122,6 +123,9 @@ Please see [CONTRIBUTING.md](https://github.com/anthonybm/Orion/blob/master/CONT
 
 ## License 
 This project is licensed under the terms of the MIT license. See [LICENSE](https://github.com/anthonybm/Orion/blob/master/LICENSE) for details.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fanthonybm%2FOrion.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fanthonybm%2FOrion?ref=badge_large)
 
 ## Code of Conduct
 This project adheres to the [Contributor Covenant code of conduct](https://github.com/anthonybm/Orion/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
