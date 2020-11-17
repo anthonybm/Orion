@@ -10,7 +10,7 @@ github.com/beevik/etree
 # github.com/karrick/godirwalk v1.16.1
 ## explicit
 github.com/karrick/godirwalk
-# github.com/mattn/go-sqlite3 v1.14.2
+# github.com/mattn/go-sqlite3 v1.14.5
 ## explicit
 github.com/mattn/go-sqlite3
 # github.com/pkg/xattr v0.4.1
@@ -28,7 +28,7 @@ go.uber.org/zap/internal/bufferpool
 go.uber.org/zap/internal/color
 go.uber.org/zap/internal/exit
 go.uber.org/zap/zapcore
-# golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd
+# golang.org/x/sys v0.0.0-20190412213103-97732733099d
 golang.org/x/sys/unix
 # gopkg.in/djherbis/times.v1 v1.2.0
 ## explicit
