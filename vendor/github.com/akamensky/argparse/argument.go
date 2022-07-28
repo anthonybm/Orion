@@ -9,25 +9,44 @@ import (
 )
 
 type arg struct {
-	result   interface{} // Pointer to the resulting value
-	opts     *Options    // Options
-	sname    string      // Short name (in Parser will start with "-"
-	lname    string      // Long name (in Parser will start with "--"
-	size     int         // Size defines how many args after match will need to be consumed
-	unique   bool        // Specifies whether flag should be present only ones
-	parsed   bool        // Specifies whether flag has been parsed already
-	fileFlag int         // File mode to open file with
-	filePerm os.FileMode // File permissions to set a file
-	selector *[]string   // Used in Selector type to allow to choose only one from list of options
-	parent   *Command    // Used to get access to specific Command
-	eqChar   bool        // This is used if the command is passed in with an equals char as a seperator
+	result   interface{}  // Pointer to the resulting value
+	opts     *Options     // Options
+	sname    string       // Short name (in Parser will start with "-"
+	lname    string       // Long name (in Parser will start with "--"
+	size     int          // Size defines how many args after match will need to be consumed
+	unique   bool         // Specifies whether flag should be present only ones
+	parsed   bool         // Specifies whether flag has been parsed already
+	fileFlag int          // File mode to open file with
+	filePerm os.FileMode  // File permissions to set a file
+	selector *[]string    // Used in Selector type to allow to choose only one from list of options
+	parent   *Command     // Used to get access to specific Command
+	eqChar   bool         // This is used if the command is passed in with an equals char as a seperator
+	argType  ArgumentType // Used to determine which argument type this is
 }
+
+// enum used to determine the argument type
+type ArgumentType int
+
+const (
+	Flag        ArgumentType = 0
+	FlagCounter              = 1
+	String                   = 2
+	Int                      = 3
+	Float                    = 4
+	File                     = 5
+	StringList               = 6
+	IntList                  = 7
+	FloatList                = 8
+	FileList                 = 9
+	Selector                 = 10
+)
 
 // Arg interface provides exporting of arg structure, while exposing it
 type Arg interface {
 	GetOpts() *Options
 	GetSname() string
 	GetLname() string
+	GetResult() interface{}
 }
 
 func (o arg) GetOpts() *Options {
@@ -40,6 +59,12 @@ func (o arg) GetSname() string {
 
 func (o arg) GetLname() string {
 	return o.lname
+}
+
+// getResult returns the interface{} to the *(type) containing the argument's result value
+// Will contain the empty/default value if argument value was not given
+func (o arg) GetResult() interface{} {
+	return o.result
 }
 
 type help struct{}
@@ -410,7 +435,10 @@ func (o *arg) usage() string {
 	case *bool:
 		break
 	case *int:
-		result = result + " <integer>"
+		isFlagCounter := !o.unique && o.size == 1
+		if !isFlagCounter {
+			result = result + " <integer>"
+		}
 	case *float64:
 		result = result + " <float>"
 	case *string:
@@ -499,7 +527,11 @@ func (o *arg) setDefault() error {
 			if reflect.TypeOf(o.result) != reflect.PtrTo(reflect.TypeOf(o.opts.Default)) {
 				return fmt.Errorf("cannot use default type [%T] as value of pointer with type [%T]", o.opts.Default, o.result)
 			}
-			reflect.ValueOf(o.result).Elem().Set(reflect.ValueOf(o.opts.Default))
+			defaultValue := o.opts.Default
+			if o.argType == Flag && defaultValue == true {
+				defaultValue = false
+			}
+			reflect.ValueOf(o.result).Elem().Set(reflect.ValueOf(defaultValue))
 
 		case *os.File:
 			if err := o.setDefaultFile(); err != nil {
