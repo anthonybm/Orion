@@ -1,6 +1,6 @@
 # Golang argparse
 
-[![GoDoc](https://godoc.org/github.com/akamensky/argparse?status.svg)](https://godoc.org/github.com/akamensky/argparse) [![Go Report Card](https://goreportcard.com/badge/github.com/akamensky/argparse)](https://goreportcard.com/report/github.com/akamensky/argparse) [![Coverage Status](https://coveralls.io/repos/github/akamensky/argparse/badge.svg?branch=master)](https://coveralls.io/github/akamensky/argparse?branch=master) [![Build Status](https://travis-ci.org/akamensky/argparse.svg?branch=master)](https://travis-ci.org/akamensky/argparse)
+[![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/akamensky) [![GoDoc](https://godoc.org/github.com/akamensky/argparse?status.svg)](https://godoc.org/github.com/akamensky/argparse) [![Go Report Card](https://goreportcard.com/badge/github.com/akamensky/argparse)](https://goreportcard.com/report/github.com/akamensky/argparse) [![Coverage Status](https://coveralls.io/repos/github/akamensky/argparse/badge.svg?branch=master)](https://coveralls.io/github/akamensky/argparse?branch=master) [![Build Status](https://travis-ci.org/akamensky/argparse.svg?branch=master)](https://travis-ci.org/akamensky/argparse)
 
 Let's be honest -- Go's standard command line arguments parser `flag` terribly sucks. 
 It cannot come anywhere close to the Python's `argparse` module. This is why this project exists.
@@ -136,6 +136,13 @@ var myLogFiles *[]os.File = parser.FileList("l", "log-file", os.O_RDWR, 0600, ..
 You can implement sub-commands in your CLI using `parser.NewCommand()` or go even deeper with `command.NewCommand()`.
 Since parser inherits from command, every command supports exactly same options as parser itself,
 thus allowing to add arguments specific to that command or more global arguments added on parser itself!
+
+You can also dynamically retrieve argument values:
+```
+var myInteger *int = parser.Int("i", "integer", ...)
+parser.Parse()
+fmt.Printf("%d", *parser.GetArgs()[0].GetResult().(*int))
+```
 
 #### Basic Option Structure
 
