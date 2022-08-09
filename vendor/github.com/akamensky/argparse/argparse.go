@@ -11,6 +11,11 @@ import (
 // DisableDescription can be assigned as a command or arguments description to hide it from the Usage output
 const DisableDescription = "DISABLEDDESCRIPTIONWILLNOTSHOWUP"
 
+// Positional Prefix
+// This must not overlap with any other arguments given or library
+// will panic.
+const positionalArgName = "_positionalArg_%s_%d"
+
 //disable help can be invoked from the parse and then needs to be propogated to subcommands
 var disableHelp = false
 
@@ -80,6 +85,14 @@ type Parser struct {
 // Options are specific options for every argument. They can be provided if necessary.
 // Possible fields are:
 //
+// Options.positional - tells Parser that the argument is positional (implies Required). Set to true by using *Positional functions.
+// Positional arguments must not have arg name preceding them and must come in a specific order.
+// Positionals are parsed breadth-first (left->right from Command tree root to leaf)
+// Positional sets Shortname="", ignores Required
+// Positionals which are not satisfied will be nil but no error will be thrown
+// Defaults are only set for unparsed positionals on commands which happened
+// Use arg.GetParsed() to detect if arg was satisfied or not
+//
 // Options.Required - tells Parser that this argument is required to be provided.
 // useful when specific Command requires some data provided.
 //
@@ -99,6 +112,9 @@ type Options struct {
 	Validate func(args []string) error
 	Help     string
 	Default  interface{}
+
+	// Private modifiers
+	positional bool
 }
 
 // NewParser creates new Parser object that will allow to add arguments for parsing
@@ -191,12 +207,13 @@ func (o *Command) Flag(short string, long string, opts *Options) *bool {
 	var result bool
 
 	a := &arg{
-		result: &result,
-		sname:  short,
-		lname:  long,
-		size:   1,
-		opts:   opts,
-		unique: true,
+		result:  &result,
+		sname:   short,
+		lname:   long,
+		size:    1,
+		opts:    opts,
+		unique:  true,
+		argType: Flag,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -217,12 +234,13 @@ func (o *Command) FlagCounter(short string, long string, opts *Options) *int {
 	var result int
 
 	a := &arg{
-		result: &result,
-		sname:  short,
-		lname:  long,
-		size:   1,
-		opts:   opts,
-		unique: false,
+		result:  &result,
+		sname:   short,
+		lname:   long,
+		size:    1,
+		opts:    opts,
+		unique:  false,
+		argType: FlagCounter,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -239,12 +257,13 @@ func (o *Command) String(short string, long string, opts *Options) *string {
 	var result string
 
 	a := &arg{
-		result: &result,
-		sname:  short,
-		lname:  long,
-		size:   2,
-		opts:   opts,
-		unique: true,
+		result:  &result,
+		sname:   short,
+		lname:   long,
+		size:    2,
+		opts:    opts,
+		unique:  true,
+		argType: String,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -252,6 +271,18 @@ func (o *Command) String(short string, long string, opts *Options) *string {
 	}
 
 	return &result
+}
+
+// See func String documentation
+func (o *Command) StringPositional(opts *Options) *string {
+	if opts == nil {
+		opts = &Options{}
+	}
+	opts.positional = true
+
+	// We supply a long name for documentation and internal logic
+	name := fmt.Sprintf(positionalArgName, o.name, len(o.args))
+	return o.String("", name, opts)
 }
 
 // Int creates new int argument, which will attempt to parse following argument as int.
@@ -262,12 +293,13 @@ func (o *Command) Int(short string, long string, opts *Options) *int {
 	var result int
 
 	a := &arg{
-		result: &result,
-		sname:  short,
-		lname:  long,
-		size:   2,
-		opts:   opts,
-		unique: true,
+		result:  &result,
+		sname:   short,
+		lname:   long,
+		size:    2,
+		opts:    opts,
+		unique:  true,
+		argType: Int,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -275,6 +307,18 @@ func (o *Command) Int(short string, long string, opts *Options) *int {
 	}
 
 	return &result
+}
+
+// See func Int documentation
+func (o *Command) IntPositional(opts *Options) *int {
+	if opts == nil {
+		opts = &Options{}
+	}
+	opts.positional = true
+
+	// We supply a long name for documentation and internal logic
+	name := fmt.Sprintf(positionalArgName, o.name, len(o.args))
+	return o.Int("", name, opts)
 }
 
 // Float creates new float argument, which will attempt to parse following argument as float64.
@@ -285,12 +329,13 @@ func (o *Command) Float(short string, long string, opts *Options) *float64 {
 	var result float64
 
 	a := &arg{
-		result: &result,
-		sname:  short,
-		lname:  long,
-		size:   2,
-		opts:   opts,
-		unique: true,
+		result:  &result,
+		sname:   short,
+		lname:   long,
+		size:    2,
+		opts:    opts,
+		unique:  true,
+		argType: Float,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -298,6 +343,18 @@ func (o *Command) Float(short string, long string, opts *Options) *float64 {
 	}
 
 	return &result
+}
+
+// See func Float documentation
+func (o *Command) FloatPositional(opts *Options) *float64 {
+	if opts == nil {
+		opts = &Options{}
+	}
+	opts.positional = true
+
+	// We supply a long name for documentation and internal logic
+	name := fmt.Sprintf(positionalArgName, o.name, len(o.args))
+	return o.Float("", name, opts)
 }
 
 // File creates new file argument, which is when provided will check if file exists or attempt to create it
@@ -319,6 +376,7 @@ func (o *Command) File(short string, long string, flag int, perm os.FileMode, op
 		unique:   true,
 		fileFlag: flag,
 		filePerm: perm,
+		argType:  File,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -328,9 +386,22 @@ func (o *Command) File(short string, long string, flag int, perm os.FileMode, op
 	return &result
 }
 
+// See func File documentation
+func (o *Command) FilePositional(flag int, perm os.FileMode, opts *Options) *os.File {
+	if opts == nil {
+		opts = &Options{}
+	}
+	opts.positional = true
+
+	// We supply a long name for documentation and internal logic
+	name := fmt.Sprintf(positionalArgName, o.name, len(o.args))
+	return o.File("", name, flag, perm, opts)
+}
+
 // List creates new list argument. This is the argument that is allowed to be present multiple times on CLI.
-// All appearances of this argument on CLI will be collected into the list of default type values ​​which is strings. If no argument
-// provided, then the list is empty. Takes same parameters as String
+// All appearances of this argument on CLI will be collected into the list of default type values which is strings.
+// If no argument provided, then the list is empty.
+// Takes same parameters as String.
 // Returns a pointer the list of strings.
 func (o *Command) List(short string, long string, opts *Options) *[]string {
 	return o.StringList(short, long, opts)
@@ -344,12 +415,13 @@ func (o *Command) StringList(short string, long string, opts *Options) *[]string
 	result := make([]string, 0)
 
 	a := &arg{
-		result: &result,
-		sname:  short,
-		lname:  long,
-		size:   2,
-		opts:   opts,
-		unique: false,
+		result:  &result,
+		sname:   short,
+		lname:   long,
+		size:    2,
+		opts:    opts,
+		unique:  false,
+		argType: StringList,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -367,12 +439,13 @@ func (o *Command) IntList(short string, long string, opts *Options) *[]int {
 	result := make([]int, 0)
 
 	a := &arg{
-		result: &result,
-		sname:  short,
-		lname:  long,
-		size:   2,
-		opts:   opts,
-		unique: false,
+		result:  &result,
+		sname:   short,
+		lname:   long,
+		size:    2,
+		opts:    opts,
+		unique:  false,
+		argType: IntList,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -390,12 +463,13 @@ func (o *Command) FloatList(short string, long string, opts *Options) *[]float64
 	result := make([]float64, 0)
 
 	a := &arg{
-		result: &result,
-		sname:  short,
-		lname:  long,
-		size:   2,
-		opts:   opts,
-		unique: false,
+		result:  &result,
+		sname:   short,
+		lname:   long,
+		size:    2,
+		opts:    opts,
+		unique:  false,
+		argType: FloatList,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -421,6 +495,7 @@ func (o *Command) FileList(short string, long string, flag int, perm os.FileMode
 		unique:   false,
 		fileFlag: flag,
 		filePerm: perm,
+		argType:  FileList,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -447,6 +522,7 @@ func (o *Command) Selector(short string, long string, options []string, opts *Op
 		opts:     opts,
 		unique:   true,
 		selector: &options,
+		argType:  Selector,
 	}
 
 	if err := o.addArg(a); err != nil {
@@ -454,6 +530,18 @@ func (o *Command) Selector(short string, long string, options []string, opts *Op
 	}
 
 	return &result
+}
+
+// See func Selector documentation
+func (o *Command) SelectorPositional(allowed []string, opts *Options) *string {
+	if opts == nil {
+		opts = &Options{}
+	}
+	opts.positional = true
+
+	// We supply a long name for documentation and internal logic
+	name := fmt.Sprintf(positionalArgName, o.name, len(o.args))
+	return o.Selector("", name, allowed, opts)
 }
 
 // message2String puts msg in result string
@@ -682,12 +770,16 @@ func (o *Parser) Parse(args []string) error {
 	copy(subargs, args)
 
 	result := o.parse(&subargs)
+	if result == nil {
+		result = o.parsePositionals(&subargs)
+	}
 	unparsed := make([]string, 0)
 	for _, v := range subargs {
 		if v != "" {
 			unparsed = append(unparsed, v)
 		}
 	}
+
 	if result == nil && len(unparsed) > 0 {
 		return errors.New("unknown arguments " + strings.Join(unparsed, " "))
 	}

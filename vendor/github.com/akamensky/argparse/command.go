@@ -51,7 +51,18 @@ func (o *Command) addArg(a *arg) error {
 		current = current.parent
 	}
 	a.parent = o
+
+	if a.GetPositional() {
+		switch a.argType { // Secondary guard
+		case Flag, FlagCounter, StringList, IntList, FloatList, FileList:
+			return fmt.Errorf("argument type cannot be positional")
+		}
+		a.sname = ""
+		a.opts.Required = false
+		a.size = 1 // We could allow other sizes in the future
+	}
 	o.args = append(o.args, a)
+
 	return nil
 }
 
@@ -68,18 +79,65 @@ func (o *Command) parseSubCommands(args *[]string) error {
 			if err != nil {
 				return err
 			}
+			if v.happened {
+				return nil
+			}
+		}
+		// If we got here, there were subcommands to parse,
+		// but none were found, so return an error
+		return newSubCommandError(o)
+	}
+	return nil
+}
+
+// Breadth-first parse style for positionals
+// Each command proceeds left to right consuming as many
+//     positionals as it needs before beginning sub-command parsing
+// All flags must have been parsed and reduced prior to calling this
+// Positionals will consume any remaining values,
+//     disregarding if they have dashes or equals signs or other "delims".
+func (o *Command) parsePositionals(inputArgs *[]string) error {
+	for _, oarg := range o.args {
+		// Two-stage parsing, this is the second stage
+		if !oarg.GetPositional() {
+			continue
+		}
+		for j := 0; j < len(*inputArgs); j++ {
+			arg := (*inputArgs)[j]
+			if arg == "" {
+				continue
+			}
+			if err := oarg.parsePositional(arg); err != nil {
+				return err
+			}
+			oarg.reduce(j, inputArgs)
+			break // Positionals can only occur once
+		}
+		// positional was unsatisfiable, use the default
+		if !oarg.parsed {
+			err := oarg.setDefault()
+			if err != nil {
+				return err
+			}
+		}
+	}
+	for _, c := range o.commands {
+		if c.happened { // presumption of only one sub-command happening
+			return c.parsePositionals(inputArgs)
 		}
 	}
 	return nil
 }
 
 //parseArguments - Parses arguments
-func (o *Command) parseArguments(args *[]string) error {
+func (o *Command) parseArguments(inputArgs *[]string) error {
 	// Iterate over the args
-	for i := 0; i < len(o.args); i++ {
-		oarg := o.args[i]
-		for j := 0; j < len(*args); j++ {
-			arg := (*args)[j]
+	for _, oarg := range o.args {
+		if oarg.GetPositional() { // Two-stage parsing, this is the first stage
+			continue
+		}
+		for j := 0; j < len(*inputArgs); j++ {
+			arg := (*inputArgs)[j]
 			if arg == "" {
 				continue
 			}
@@ -88,7 +146,7 @@ func (o *Command) parseArguments(args *[]string) error {
 				equalArg := []string{arg[:splitInd], arg[splitInd+1:]}
 				if cnt, err := oarg.check(equalArg[0]); err != nil {
 					return err
-				} else if cnt > 0 {
+				} else if cnt > 0 { // No args implies we supply default
 					if equalArg[1] == "" {
 						return fmt.Errorf("not enough arguments for %s", oarg.name())
 					}
@@ -99,21 +157,21 @@ func (o *Command) parseArguments(args *[]string) error {
 					if err != nil {
 						return err
 					}
-					oarg.reduce(j, args)
+					oarg.reduce(j, inputArgs)
 					continue
 				}
 			}
 			if cnt, err := oarg.check(arg); err != nil {
 				return err
 			} else if cnt > 0 {
-				if len(*args) < j+oarg.size {
+				if len(*inputArgs) < j+oarg.size {
 					return fmt.Errorf("not enough arguments for %s", oarg.name())
 				}
-				err := oarg.parse((*args)[j+1:j+oarg.size], cnt)
+				err := oarg.parse((*inputArgs)[j+1:j+oarg.size], cnt)
 				if err != nil {
 					return err
 				}
-				oarg.reduce(j, args)
+				oarg.reduce(j, inputArgs)
 				continue
 			}
 		}
@@ -121,10 +179,8 @@ func (o *Command) parseArguments(args *[]string) error {
 		// Check if arg is required and not provided
 		if oarg.opts != nil && oarg.opts.Required && !oarg.parsed {
 			return fmt.Errorf("[%s] is required", oarg.name())
-		}
-
-		// Check for argument default value and if provided try to type cast and assign
-		if oarg.opts != nil && oarg.opts.Default != nil && !oarg.parsed {
+		} else if oarg.opts != nil && oarg.opts.Default != nil && !oarg.parsed {
+			// Check for argument default value and if provided try to type cast and assign
 			err := oarg.setDefault()
 			if err != nil {
 				return err
@@ -136,8 +192,11 @@ func (o *Command) parseArguments(args *[]string) error {
 
 // Will parse provided list of arguments
 // common usage would be to pass directly os.Args
+// Depth-first parsing: We will reach the deepest
+//    node of the command tree and then parse arguments,
+//    stepping back up only after each node is satisfied.
 func (o *Command) parse(args *[]string) error {
-	// If we already been parsed do nothing
+	// If already been parsed do nothing
 	if o.parsed {
 		return nil
 	}
@@ -157,7 +216,7 @@ func (o *Command) parse(args *[]string) error {
 		}
 	}
 
-	// Set happened status to true when command happend
+	// Set happened status to true when command happened
 	o.happened = true
 
 	// Reduce arguments by removing Command name
