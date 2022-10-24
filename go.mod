@@ -3,7 +3,7 @@ module github.com/anthonybm/Orion
 go 1.14
 
 require (
-	github.com/BurntSushi/toml v0.3.1
+	github.com/BurntSushi/toml v1.2.1
 	github.com/akamensky/argparse v1.2.2
 	github.com/beevik/etree v1.1.0
 	github.com/karrick/godirwalk v1.16.1
