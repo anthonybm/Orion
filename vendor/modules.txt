@@ -1,6 +1,7 @@
-# github.com/BurntSushi/toml v0.3.1
+# github.com/BurntSushi/toml v1.3.0
 ## explicit
 github.com/BurntSushi/toml
+github.com/BurntSushi/toml/internal
 # github.com/akamensky/argparse v1.2.2
 ## explicit
 github.com/akamensky/argparse
